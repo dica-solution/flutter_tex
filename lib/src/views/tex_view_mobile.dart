@@ -18,31 +18,35 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
     super.build(context);
     updateKeepAlive();
     _buildTeXView();
-    return IndexedStack(
-      index: widget.loadingWidgetBuilder?.call(context) != null
-          ? _height == 1
-              ? 1
-              : 0
-          : 0,
-      children: <Widget>[
-        SizedBox(
-          height: _height,
-          child: WebViewPlus(
-            onPageFinished: (message) {
-              _pageLoaded = true;
-              _buildTeXView();
-            },
-            initialUrl:
-                "packages/flutter_tex/js/${widget.renderingEngine?.name ?? 'katex'}/index.html",
-            onWebViewCreated: (controller) {
-              this._controller = controller;
-            },
-            javascriptChannels: jsChannels(),
-            javascriptMode: JavascriptMode.unrestricted,
-          ),
-        ),
-        widget.loadingWidgetBuilder?.call(context) ?? SizedBox.shrink()
-      ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return IndexedStack(
+          index: widget.loadingWidgetBuilder?.call(context) != null
+              ? _height == 1
+                  ? 1
+                  : 0
+              : 0,
+          children: <Widget>[
+            ConstrainedBox(
+              constraints: constraints,
+              child: WebViewPlus(
+                onPageFinished: (message) {
+                  _pageLoaded = true;
+                  _buildTeXView();
+                },
+                initialUrl:
+                    "packages/flutter_tex/js/${widget.renderingEngine?.name ?? 'katex'}/index.html",
+                onWebViewCreated: (controller) {
+                  this._controller = controller;
+                },
+                javascriptChannels: jsChannels(),
+                javascriptMode: JavascriptMode.unrestricted,
+              ),
+            ),
+            widget.loadingWidgetBuilder?.call(context) ?? SizedBox.shrink()
+          ],
+        );
+      },
     );
   }
 

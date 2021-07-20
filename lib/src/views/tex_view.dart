@@ -25,17 +25,18 @@ class TeXView extends StatefulWidget {
 
   /// Callback when TEX rendering finishes.
   final Function(double height)? onRenderFinished;
-
-  const TeXView({
-    Key? key,
-    required this.child,
-    this.fonts,
-    this.height = 500,
-    this.style,
-    this.loadingWidgetBuilder,
-    this.onRenderFinished,
-    this.renderingEngine,
-  }) : super(key: key);
+  final bool? verticalScrollOnly;
+  const TeXView(
+      {Key? key,
+      required this.child,
+      this.fonts,
+      this.height = 500,
+      this.style,
+      this.loadingWidgetBuilder,
+      this.onRenderFinished,
+      this.renderingEngine,
+      this.verticalScrollOnly})
+      : super(key: key);
 
   @override
   TeXViewState createState() => TeXViewState();

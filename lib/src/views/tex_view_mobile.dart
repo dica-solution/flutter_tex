@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_tex/src/utils/core_utils.dart';
@@ -59,6 +61,11 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
                   })
             },
             javascriptMode: JavascriptMode.unrestricted,
+            gestureRecognizers: widget.verticalScrollOnly == true
+                ? (Set()
+                  ..add(Factory<VerticalDragGestureRecognizer>(
+                      () => VerticalDragGestureRecognizer())))
+                : null,
           ),
         ),
         widget.loadingWidgetBuilder?.call(context) ?? const SizedBox.shrink()

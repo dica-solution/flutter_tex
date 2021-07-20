@@ -25,6 +25,7 @@ class TeXView extends StatefulWidget {
 
   /// Callback when TEX rendering finishes.
   final Function(double height)? onRenderFinished;
+  final bool verticalScrollOnly;
 
   const TeXView({
     Key? key,
@@ -35,6 +36,7 @@ class TeXView extends StatefulWidget {
     this.loadingWidgetBuilder,
     this.onRenderFinished,
     this.renderingEngine,
+    this.verticalScrollOnly = false,
   }) : super(key: key);
 
   @override

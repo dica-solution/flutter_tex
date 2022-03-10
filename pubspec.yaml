@@ -6,13 +6,18 @@ version: 4.0.3+4
 
 homepage: https://github.com/shah-xad/flutter_tex
 
+publish_to: 'none'
+
 environment:
   sdk: ">=2.16.0 <3.0.0"
   flutter: ">=1.17.0"
 
 
 dependencies:
-  webview_flutter_plus: ^0.3.0+2
+  webview_flutter_plus:
+    git:
+      url: https://github.com/cnmade/webview_flutter_plus.git
+      ref: 55aba0b67fbef33422cf17c9aa10e1a439b3624f
   markdown: ^4.0.1
 
   flutter:

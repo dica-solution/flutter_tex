@@ -222,10 +222,12 @@ packages:
   webview_flutter_plus:
     dependency: transitive
     description:
-      name: webview_flutter_plus
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0+2"
+      path: "."
+      ref: "55aba0b67fbef33422cf17c9aa10e1a439b3624f"
+      resolved-ref: "55aba0b67fbef33422cf17c9aa10e1a439b3624f"
+      url: "https://github.com/cnmade/webview_flutter_plus.git"
+    source: git
+    version: "0.3.0+1"
   webview_flutter_wkwebview:
     dependency: transitive
     description:

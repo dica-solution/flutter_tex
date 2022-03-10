@@ -20,57 +20,60 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
     super.build(context);
     updateKeepAlive();
     _initTeXView();
-    return IndexedStack(
-      index: widget.loadingWidgetBuilder?.call(context) != null
-          ? _height == minHeight
-              ? 1
-              : 0
-          : 0,
-      children: <Widget>[
-        SizedBox(
-          height: _height,
-          child: WebViewPlus(
-            onPageFinished: (message) {
-              _pageLoaded = true;
-              _initTeXView();
-            },
-            initialUrl:
-                "packages/flutter_tex/js/${widget.renderingEngine?.name ?? 'katex'}/index.html",
-            onWebViewCreated: (controller) {
-              _controller = controller;
-            },
-            initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-            backgroundColor: Colors.transparent,
-            allowsInlineMediaPlayback: true,
-            javascriptChannels: {
-              JavascriptChannel(
-                  name: 'TeXViewRenderedCallback',
-                  onMessageReceived: (jm) async {
-                    double height = double.parse(jm.message);
-                    if (_height != height) {
-                      setState(() {
-                        _height = height;
-                      });
-                    }
-                    widget.onRenderFinished?.call(height);
-                  }),
-              JavascriptChannel(
-                  name: 'OnTapCallback',
-                  onMessageReceived: (jm) {
-                    widget.child.onTapCallback(jm.message);
-                  })
-            },
-            javascriptMode: JavascriptMode.unrestricted,
-            gestureRecognizers: widget.verticalScrollOnly == true
-                ? (Set()
-                  ..add(Factory<VerticalDragGestureRecognizer>(
-                      () => VerticalDragGestureRecognizer())))
-                : null,
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return IndexedStack(
+        index: widget.loadingWidgetBuilder?.call(context) != null
+            ? _height == minHeight
+                ? 1
+                : 0
+            : 0,
+        children: <Widget>[
+          ConstrainedBox(
+            constraints: constraints,
+            child: WebViewPlus(
+              onPageFinished: (message) {
+                _pageLoaded = true;
+                _initTeXView();
+              },
+              initialUrl:
+                  "packages/flutter_tex/js/${widget.renderingEngine?.name ?? 'katex'}/index.html",
+              onWebViewCreated: (controller) {
+                _controller = controller;
+              },
+              initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+              backgroundColor: Colors.transparent,
+              allowsInlineMediaPlayback: true,
+              javascriptChannels: {
+                JavascriptChannel(
+                    name: 'TeXViewRenderedCallback',
+                    onMessageReceived: (jm) async {
+                      double height = double.parse(jm.message);
+                      if (_height != height) {
+                        setState(() {
+                          _height = height;
+                        });
+                      }
+                      widget.onRenderFinished?.call(height);
+                    }),
+                JavascriptChannel(
+                    name: 'OnTapCallback',
+                    onMessageReceived: (jm) {
+                      widget.child.onTapCallback(jm.message);
+                    })
+              },
+              javascriptMode: JavascriptMode.unrestricted,
+              gestureRecognizers: widget.verticalScrollOnly == true
+                  ? (Set()
+                    ..add(Factory<VerticalDragGestureRecognizer>(
+                        () => VerticalDragGestureRecognizer())))
+                  : null,
+            ),
           ),
-        ),
-        widget.loadingWidgetBuilder?.call(context) ?? const SizedBox.shrink()
-      ],
-    );
+          widget.loadingWidgetBuilder?.call(context) ?? const SizedBox.shrink()
+        ],
+      );
+    });
   }
 
   void _initTeXView() {
